@@ -22,6 +22,21 @@ public class FragmentA extends Fragment {
     private OnSetTextSizeListener listener;
 
     /**
+     * This method comes from GOOGLE CREATING FACTORY DESIGN PATTERN
+     * Method which creates an object from the own FragmentB class
+     * Guaranteeing calling setArguments immediately after the creation.
+     *
+     * @param bundle arguments
+     * @return instance of FragmentB with arguments (if they were necessary)
+     */
+    public static Fragment newInstance(Bundle bundle) {
+        FragmentA fragmentA = new FragmentA();
+        if (bundle != null)
+            fragmentA.setArguments(bundle);
+        return fragmentA;
+    }
+
+    /**
      * This interface will be used as contract between FragmentA and its container (Activity)
      */
     public interface OnSetTextSizeListener {
@@ -72,5 +87,35 @@ public class FragmentA extends Fragment {
         super.onDetach();
         listener = null;
         Log.d(LOGTAG, "FragmentA -> onDetach()");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(LOGTAG, "FragmentA -> onStart()");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOGTAG, "FragmentA -> onResume()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(LOGTAG, "FragmentA -> onPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOGTAG, "FragmentA -> onStop()");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOGTAG, "FragmentA -> onDestroy()");
     }
 }

@@ -1,6 +1,7 @@
 package es.raulprieto.dynamicfragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,11 +20,12 @@ public class MainActivity extends AppCompatActivity implements FragmentA.OnSetTe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
         // Avoid creating multiple fragments when turning the phone screen
-        fragmentA = getSupportFragmentManager().findFragmentByTag(FragmentA.TAG);
+        fragmentA = fragmentManager.findFragmentByTag(FragmentA.TAG);
         if (fragmentA == null) {
-            fragmentA = new FragmentA();
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentA = FragmentA.newInstance(null);
+
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             fragmentTransaction.add(android.R.id.content, fragmentA, FragmentA.TAG);
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements FragmentA.OnSetTe
             fragmentTransaction.commit();
         }
 
+        Log.d(TAG, "Activity -> onCreate()");
     }
 
     @Override
@@ -50,5 +53,30 @@ public class MainActivity extends AppCompatActivity implements FragmentA.OnSetTe
         // It is stored the transaction state into the fragments pile stored by the Activity
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();Log.d(TAG, "Activity -> onStart()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();Log.d(TAG, "Activity -> onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();Log.d(TAG, "Activity -> onDestroy()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();Log.d(TAG, "Activity -> onPause()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();Log.d(TAG, "Activity -> onResume()");
     }
 }

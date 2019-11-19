@@ -1,6 +1,6 @@
 package es.raulprieto.dynamicfragment;
 
-
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -16,9 +16,18 @@ import androidx.fragment.app.Fragment;
 import es.raulprieto.dynamicfragment.databinding.FragmentBBinding;
 
 public class FragmentB extends Fragment {
+    private final String LOGTAG = "DynamicFragment";
     public static final String TAG = "FragmentB";
     private final String SIZE = "size";
     private final String TEXT = "text";
+
+    /**
+     * Values are retain at these two fields
+     */
+    private float size;
+    private String text;
+    //******************************************************
+
     private FragmentBBinding binding;
 
     /**
@@ -35,13 +44,25 @@ public class FragmentB extends Fragment {
         return instance;
     }
 
+    /**
+     * This Fragment will retain
+     *
+     * @param savedInstanceState data
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        Log.d(LOGTAG, "FragmentB -> onCreate()");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_b, container, false);
         View view = binding.getRoot();
 
-        Log.d(TAG, "FragmentB -> onCreateView()");
+        Log.d(LOGTAG, "FragmentB -> onCreateView()");
         return view;
     }
 
@@ -49,31 +70,38 @@ public class FragmentB extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            binding.tvMessage.setTextSize(bundle.getFloat(SIZE));
-            binding.tvMessage.setText(bundle.getString(TEXT));
+        if (savedInstanceState == null) {
+            // It must be checked if the Fragment has got arguments
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                size = bundle.getFloat(SIZE);
+                text = bundle.getString(TEXT);
+            }
+            Log.d(LOGTAG, "FragmentB -> 1st onViewCreated()");
         }
+        binding.tvMessage.setTextSize(size);
+        binding.tvMessage.setText(text);
+        Log.d(LOGTAG, "FragmentB -> onViewCreated()");
     }
 
-    /**
+    /*
      * This method stores the fragment's dynamic state inside of the bundle
      *
      * @param outState bundle
-     */
+     *//*
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putFloat(SIZE, binding.tvMessage.getTextSize());
         outState.putString(TEXT, binding.tvMessage.getText().toString());
-        Log.d(TAG, "FragmentB -> onSaveInstanceState()");
+        Log.d(LOGTAG, "FragmentB -> onSaveInstanceState()");
     }
 
-    /**
+    *//*
      * This method restores the dynamic state stored into the savedInstanceState bundle
      *
      * @param savedInstanceState bundle
-     */
+     *//*
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -81,25 +109,31 @@ public class FragmentB extends Fragment {
             binding.tvMessage.setTextSize(TypedValue.COMPLEX_UNIT_PX, savedInstanceState.getFloat(SIZE));
             binding.tvMessage.setText(savedInstanceState.getString(TEXT));
         }
-        Log.d(TAG, "FragmentB -> onViewStateRestored()");
-    }
+        Log.d(LOGTAG, "FragmentB -> onViewStateRestored()");
+    }*/
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "FragmentB -> onPause()");
+        Log.d(LOGTAG, "FragmentB -> onPause()");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "FragmentB -> onStop()");
+        Log.d(LOGTAG, "FragmentB -> onStop()");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d(LOGTAG, "FragmentB -> onAttach()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "FragmentB -> onDestroy()");
+        Log.d(LOGTAG, "FragmentB -> onDestroy()");
     }
 
 }
